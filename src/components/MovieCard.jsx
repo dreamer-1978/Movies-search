@@ -1,11 +1,18 @@
 import "../css/MovieCard.css";
 import PropsTypes from "prop-types";
+import { useMovieContext } from "../contexts/MovieContext";
 
 function MovieCard({ movie }) {
   const prefix = "https://image.tmdb.org/t/p/w300_and_h450_bestv2";
 
+  const {addFavorites, removeFavorites, isFavorite} =
+    useMovieContext();
+
+  const favorite = isFavorite(movie.id)
+  
   function onFavoriteClick() {
-    console.log("click");
+   if(favorite) removeFavorites(movie.id)
+   else addFavorites(movie);
   }
   return (
     <div className="movie-card">
@@ -13,7 +20,7 @@ function MovieCard({ movie }) {
         <img src={`${prefix + movie.poster_path}`} alt={movie.title} />
         <div className="movie-overlay">
           <button className="favorite-btn" onClick={onFavoriteClick}>
-            <span className="red-heart">♥</span>
+            <span className={`${favorite ? 'red-heart': ''}`}>♥</span>
           </button>
         </div>
       </div>
